@@ -20,6 +20,8 @@ public class FileTeleportationCache extends TeleportationCache {
 
                 players.add(name);
             }
+
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
             throw new InternalError("Cannot read from cache file!");
@@ -34,7 +36,7 @@ public class FileTeleportationCache extends TeleportationCache {
         super(players);
 
         try {
-            this.fileOutput = new BufferedWriter(new FileWriter(file));
+            this.fileOutput = new BufferedWriter(new FileWriter(file, true));
         } catch (IOException e) {
             e.printStackTrace();
             throw new InternalError("Cannot write to cache file!");
