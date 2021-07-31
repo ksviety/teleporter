@@ -1,5 +1,7 @@
 package me.ksviety.teleporter;
 
+import net.minecraft.util.math.Vec3i;
+
 import java.util.Random;
 
 public class RandomPositionProvider implements PositionProvider {
@@ -10,8 +12,8 @@ public class RandomPositionProvider implements PositionProvider {
     }
 
     @Override
-    public Position provide() {
-        return new Position(
+    public Vec3i provide() {
+        return new Vec3i(
                 random.nextInt(),
                 random.nextInt(),
                 random.nextInt()

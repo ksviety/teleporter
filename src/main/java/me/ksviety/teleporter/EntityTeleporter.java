@@ -3,6 +3,8 @@ package me.ksviety.teleporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -14,7 +16,7 @@ public class EntityTeleporter {
     }
 
     public void teleport(Entity entity) {
-        Position position = positionProvider.provide();
+        Vec3i position = positionProvider.provide();
 
         final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
