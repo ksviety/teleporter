@@ -5,7 +5,7 @@ import net.minecraft.world.border.WorldBorder;
 
 import java.util.Random;
 
-public class RandomPositionProvider implements PositionProvider {
+public class RandomPositionProvider implements IPositionProvider {
     private static final int DOUBLED_WORLD_HEIGHT = 255;
 
     private final Random random;

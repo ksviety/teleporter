@@ -1,17 +1,14 @@
 package me.ksviety.teleporter;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class EntityTeleporter {
-    private final PositionProvider positionProvider;
+    private final IPositionProvider positionProvider;
 
-    protected EntityTeleporter(PositionProvider positionProvider) {
+    protected EntityTeleporter(IPositionProvider positionProvider) {
         this.positionProvider = positionProvider;
     }
 

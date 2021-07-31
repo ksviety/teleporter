@@ -5,11 +5,11 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 
-public class SafePositionProvider implements PositionProvider {
-    private final PositionProvider positionProvider;
+public class SafePositionProvider implements IPositionProvider {
+    private final IPositionProvider positionProvider;
     private final World world;
 
-    public SafePositionProvider(PositionProvider positionProvider, World world) {
+    public SafePositionProvider(IPositionProvider positionProvider, World world) {
         this.positionProvider = positionProvider;
         this.world = world;
     }
