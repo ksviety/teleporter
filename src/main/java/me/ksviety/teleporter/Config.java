@@ -20,9 +20,13 @@ public class Config {
         final int centerX = config.getInt("centerX");
         final int centerZ = config.getInt("centerZ");
         final int size = config.getInt("size");
-        final String[] bannedBlocksArray = (String[]) config.getJSONArray("bannedBlocks").toList().toArray();
+        final JSONArray bannedBlocksArray = config.getJSONArray("bannedBlocks");
 
-        final Set<String> bannedBlocks = new HashSet<>(Arrays.asList(bannedBlocksArray));
+        final Set<String> bannedBlocks = new HashSet<>();
+
+        for (int i = 0; i < bannedBlocksArray.toList().size(); i++) {
+            bannedBlocks.add(bannedBlocksArray.getString(i));
+        }
 
         return new Config(bannedBlocks, centerX, centerZ, size);
     }
