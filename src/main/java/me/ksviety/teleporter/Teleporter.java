@@ -46,8 +46,7 @@ public class Teleporter
                 new EntityTeleporter(
                         new SafePositionProvider(
                                 new RandomPositionProvider(
-                                        new SecureRandom(),
-                                        world.getWorldBorder()
+                                        new SecureRandom()
                                 ),
                                 world,
                                 config.getBannedBlocks()
