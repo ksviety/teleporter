@@ -48,7 +48,8 @@ public class Teleporter
                                 new BoundRandomPositionProvider(
                                         config.getCenterX(),
                                         config.getCenterZ(),
-                                        config.getSize()
+                                        config.getSize(),
+                                        new SecureRandom()
                                 ),
                                 world,
                                 config.getBannedBlocks()

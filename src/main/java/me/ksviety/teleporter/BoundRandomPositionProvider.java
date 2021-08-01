@@ -2,22 +2,26 @@ package me.ksviety.teleporter;
 
 import net.minecraft.util.math.Vec3i;
 
+import java.util.Random;
+
 public class BoundRandomPositionProvider implements IPositionProvider {
     private final int centerX;
     private final int centerZ;
     private final int size;
+    private final Random random;
 
-    public BoundRandomPositionProvider(int centerX, int centerZ, int size) {
+    public BoundRandomPositionProvider(int centerX, int centerZ, int size, Random random) {
         this.centerX = centerX;
         this.centerZ = centerZ;
         this.size = size;
+        this.random = random;
     }
 
     @Override
     public final Vec3i provide() {
-        final double x = Math.random();
-        final double z = Math.random();
-        final double y = Math.random();
+        final double x = getRandomCoordinate();
+        final double z = getRandomCoordinate();
+        final double y = getRandomCoordinate();
 
         final int minX = centerX - size;
         final int minZ = centerZ - size;
@@ -36,5 +40,9 @@ public class BoundRandomPositionProvider implements IPositionProvider {
 
     private int scaleCoordinate(double coordinate, double min, double max) {
         return (int) (coordinate * (max - min) + min);
+    }
+
+    private double getRandomCoordinate() {
+        return (double) random.nextInt(size) / (double) size;
     }
 }
