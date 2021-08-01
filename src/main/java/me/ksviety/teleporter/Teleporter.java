@@ -45,9 +45,10 @@ public class Teleporter
         new OneTimeEntityTeleporter(
                 new EntityTeleporter(
                         new SafePositionProvider(
-                                new RandomPositionProvider(
-                                        new SecureRandom(),
-                                        world.getWorldBorder()
+                                new BoundRandomPositionProvider(
+                                        config.getCenterX(),
+                                        config.getCenterZ(),
+                                        config.getSize()
                                 ),
                                 world,
                                 config.getBannedBlocks()
