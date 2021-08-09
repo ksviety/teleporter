@@ -1,5 +1,7 @@
-package me.ksviety.teleporter;
+package me.ksviety.teleporter.teleporters;
 
+import me.ksviety.teleporter.IEntityTeleporter;
+import me.ksviety.teleporter.IPositionProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3i;

@@ -1,5 +1,7 @@
-package me.ksviety.teleporter;
+package me.ksviety.teleporter.teleporters;
 
+import me.ksviety.teleporter.IEntityTeleporter;
+import me.ksviety.teleporter.TeleportationCache;
 import net.minecraft.entity.Entity;
 
 import java.util.Collection;
