@@ -18,8 +18,5 @@ public abstract class TeleportationCache implements ICache {
 
     public void addPlayerAsTeleported(String name) {
         alreadyTeleportedPlayers.add(name);
-        addPlayerToCache(name);
     }
-
-    protected abstract void addPlayerToCache(String name);
 }
