@@ -3,6 +3,7 @@ package me.ksviety.teleporter.providers;
 import me.ksviety.teleporter.IPositionProvider;
 import me.ksviety.teleporter.ShiftAxis;
 import me.ksviety.teleporter.ShiftedVec3i;
+import me.ksviety.teleporter.exceptions.CannotFindClosetSafePositionException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -10,6 +11,9 @@ import net.minecraft.world.World;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * Can throw <a>CannotFindClosestSafePositionException</a>
+ */
 public class SafePositionProvider implements IPositionProvider {
     private final static ShiftAxis[] SHIFT_DIRECTIONS = new ShiftAxis[] {
             ShiftAxis.Forward,
@@ -22,12 +26,20 @@ public class SafePositionProvider implements IPositionProvider {
     private final World world;
     private final Collection<String> bannedBlocks;
     private final int shiftRadius;
+    private final int maxSearchIterations;
 
-    public SafePositionProvider(IPositionProvider positionProvider, World world, Collection<String> bannedBlocks, int shiftRadius) {
+    public SafePositionProvider(
+            IPositionProvider positionProvider,
+            World world,
+            Collection<String> bannedBlocks,
+            int shiftRadius,
+            int maxSearchIterations
+    ) {
         this.positionProvider = positionProvider;
         this.world = world;
         this.bannedBlocks = bannedBlocks;
         this.shiftRadius = shiftRadius;
+        this.maxSearchIterations = maxSearchIterations;
     }
 
     @Override
@@ -35,7 +47,7 @@ public class SafePositionProvider implements IPositionProvider {
         return getSafePosition();
     }
 
-    private Vec3i getSafePosition() {
+    private Vec3i getSafePosition(int iteration) {
         final Vec3i position = positionProvider.provide();
 
         for (int shift = 0; shift < shiftRadius; shift++) {
@@ -54,7 +66,14 @@ public class SafePositionProvider implements IPositionProvider {
             }
         }
 
-        return getSafePosition();
+        if (iteration >= maxSearchIterations)
+            throw new CannotFindClosetSafePositionException();
+
+        return getSafePosition(iteration + 1);
+    }
+
+    private Vec3i getSafePosition() {
+        return getSafePosition(0);
     }
 
     private boolean isSafe(Vec3i position) {
