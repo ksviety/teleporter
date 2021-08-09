@@ -58,7 +58,8 @@ public class Teleporter
                                         new SecureRandom()
                                 ),
                                 world,
-                                config.getBannedBlocks()
+                                config.getBannedBlocks(),
+                                config.getShiftRadius()
                         )
                 ),
                 teleportationCache

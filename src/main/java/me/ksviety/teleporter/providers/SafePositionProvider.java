@@ -1,6 +1,5 @@
 package me.ksviety.teleporter.providers;
 
-import jdk.nashorn.internal.ir.Block;
 import me.ksviety.teleporter.IPositionProvider;
 import me.ksviety.teleporter.ShiftAxis;
 import me.ksviety.teleporter.ShiftedVec3i;
@@ -22,11 +21,13 @@ public class SafePositionProvider implements IPositionProvider {
     private final IPositionProvider positionProvider;
     private final World world;
     private final Collection<String> bannedBlocks;
+    private final int shiftRadius;
 
-    public SafePositionProvider(IPositionProvider positionProvider, World world, Collection<String> bannedBlocks) {
+    public SafePositionProvider(IPositionProvider positionProvider, World world, Collection<String> bannedBlocks, int shiftRadius) {
         this.positionProvider = positionProvider;
         this.world = world;
         this.bannedBlocks = bannedBlocks;
+        this.shiftRadius = shiftRadius;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class SafePositionProvider implements IPositionProvider {
     private Vec3i getSafePosition() {
         final Vec3i position = positionProvider.provide();
 
-        for (int shift = 0; shift < 200; shift++) {
+        for (int shift = 0; shift < shiftRadius; shift++) {
             for (ShiftAxis axis : SHIFT_DIRECTIONS) {
                 final Vec3i topBlockPosition = world.getTopSolidOrLiquidBlock(
                         new BlockPos(

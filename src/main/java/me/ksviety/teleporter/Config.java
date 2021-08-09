@@ -21,6 +21,7 @@ public class Config {
         final int centerZ = config.getInt("centerZ");
         final int size = config.getInt("size");
         final JSONArray bannedBlocksArray = config.getJSONArray("bannedBlocks");
+        final int shiftRadius = config.getInt("shiftRadius");
 
         final Set<String> bannedBlocks = new HashSet<>();
 
@@ -28,19 +29,21 @@ public class Config {
             bannedBlocks.add(bannedBlocksArray.getString(i));
         }
 
-        return new Config(bannedBlocks, centerX, centerZ, size);
+        return new Config(bannedBlocks, centerX, centerZ, size, shiftRadius);
     }
 
     private final Set<String> bannedBlocks;
     private final int centerX;
     private final int centerZ;
     private final int size;
+    private final int shiftRadius;
 
-    private Config(Set<String> bannedBlocks, int centerX, int centerZ, int size) {
+    private Config(Set<String> bannedBlocks, int centerX, int centerZ, int size, int shiftRadius) {
         this.bannedBlocks = bannedBlocks;
         this.centerX = centerX;
         this.centerZ = centerZ;
         this.size = size;
+        this.shiftRadius = shiftRadius;
     }
 
     public Collection<String> getBannedBlocks() {
@@ -57,5 +60,9 @@ public class Config {
 
     public int getCenterX() {
         return centerX;
+    }
+
+    public int getShiftRadius() {
+        return shiftRadius;
     }
 }
