@@ -3,7 +3,7 @@ package me.ksviety.teleporter;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class TeleportationCache {
+public abstract class TeleportationCache implements ICache {
     private final Set<String> alreadyTeleportedPlayers;
 
     protected TeleportationCache(Set<String> alreadyTeleportedPlayers) {
@@ -18,8 +18,6 @@ public abstract class TeleportationCache {
         alreadyTeleportedPlayers.add(name);
         addPlayerToCache(name);
     }
-
-    public abstract void save();
 
     protected abstract void addPlayerToCache(String name);
 }
