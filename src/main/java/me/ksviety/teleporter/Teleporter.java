@@ -59,8 +59,8 @@ public class Teleporter
                                 ),
                                 world,
                                 config.getBannedBlocks(),
-                                config.getShiftRadius()
-                        )
+                                config.getShiftRadius(),
+                                config.getSearchIterationsLimit())
                 ),
                 teleportationCache
         ).teleport(player);
