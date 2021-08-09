@@ -1,5 +1,6 @@
-package me.ksviety.teleporter;
+package me.ksviety.teleporter.providers;
 
+import me.ksviety.teleporter.IPositionProvider;
 import net.minecraft.util.math.Vec3i;
 
 import java.util.Random;
