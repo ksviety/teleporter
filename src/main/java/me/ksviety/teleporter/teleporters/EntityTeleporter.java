@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 public class EntityTeleporter implements IEntityTeleporter {
     private final IPositionProvider positionProvider;
 
-    protected EntityTeleporter(IPositionProvider positionProvider) {
+    public EntityTeleporter(IPositionProvider positionProvider) {
         this.positionProvider = positionProvider;
     }
 
