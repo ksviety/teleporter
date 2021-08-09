@@ -1,4 +1,4 @@
-package me.ksviety.teleporter;
+package me.ksviety.teleporter.cache;
 
 import java.io.*;
 import java.util.HashSet;

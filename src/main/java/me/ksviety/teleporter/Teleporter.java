@@ -1,5 +1,7 @@
 package me.ksviety.teleporter;
 
+import me.ksviety.teleporter.cache.FileTeleportationCache;
+import me.ksviety.teleporter.cache.TeleportationCache;
 import me.ksviety.teleporter.providers.BoundRandomPositionProvider;
 import me.ksviety.teleporter.providers.SafePositionProvider;
 import me.ksviety.teleporter.teleporters.EntityTeleporter;

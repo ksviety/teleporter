@@ -1,4 +1,6 @@
-package me.ksviety.teleporter;
+package me.ksviety.teleporter.cache;
+
+import me.ksviety.teleporter.ICache;
 
 import java.util.Collection;
 import java.util.Set;
