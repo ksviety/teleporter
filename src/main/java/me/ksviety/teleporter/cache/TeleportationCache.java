@@ -1,9 +1,11 @@
-package me.ksviety.teleporter;
+package me.ksviety.teleporter.cache;
+
+import me.ksviety.teleporter.ICache;
 
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class TeleportationCache {
+public abstract class TeleportationCache implements ICache {
     private final Set<String> alreadyTeleportedPlayers;
 
     protected TeleportationCache(Set<String> alreadyTeleportedPlayers) {
@@ -16,10 +18,5 @@ public abstract class TeleportationCache {
 
     public void addPlayerAsTeleported(String name) {
         alreadyTeleportedPlayers.add(name);
-        addPlayerToCache(name);
     }
-
-    public abstract void save();
-
-    protected abstract void addPlayerToCache(String name);
 }

@@ -1,4 +1,4 @@
-package me.ksviety.teleporter;
+package me.ksviety.teleporter.cache;
 
 import java.io.*;
 import java.util.HashSet;
@@ -36,7 +36,7 @@ public class FileTeleportationCache extends TeleportationCache {
         super(players);
 
         try {
-            this.fileOutput = new BufferedWriter(new FileWriter(file, true));
+            this.fileOutput = new BufferedWriter(new FileWriter(file, false));
         } catch (IOException e) {
             e.printStackTrace();
             throw new InternalError("Cannot write to cache file!");
@@ -46,19 +46,13 @@ public class FileTeleportationCache extends TeleportationCache {
     @Override
     public void save() {
         try {
-            fileOutput.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new InternalError("Cannot write to cache file!");
-        }
-    }
+            for (String player : getAlreadyTeleportedPlayers()) {
+                fileOutput.append(player);
+                fileOutput.newLine();
+            }
 
-    @Override
-    protected void addPlayerToCache(String name) {
-        try {
-            fileOutput.append(name);
-            fileOutput.newLine();
             fileOutput.flush();
+            fileOutput.close();
         } catch (IOException e) {
             e.printStackTrace();
             throw new InternalError("Cannot write to cache file!");
