@@ -1,16 +1,16 @@
 package me.ksviety.teleporter.teleporters;
 
 import me.ksviety.teleporter.IEntityTeleporter;
-import me.ksviety.teleporter.IPositionProvider;
+import me.ksviety.teleporter.PositionProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class EntityTeleporter implements IEntityTeleporter {
-    private final IPositionProvider positionProvider;
+    private final PositionProvider positionProvider;
 
-    public EntityTeleporter(IPositionProvider positionProvider) {
+    public EntityTeleporter(PositionProvider positionProvider) {
         this.positionProvider = positionProvider;
     }
 

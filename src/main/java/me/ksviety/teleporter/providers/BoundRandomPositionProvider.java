@@ -1,11 +1,11 @@
 package me.ksviety.teleporter.providers;
 
-import me.ksviety.teleporter.IPositionProvider;
+import me.ksviety.teleporter.PositionProvider;
 import net.minecraft.util.math.Vec3i;
 
 import java.util.Random;
 
-public class BoundRandomPositionProvider implements IPositionProvider {
+public class BoundRandomPositionProvider implements PositionProvider {
     private final int centerX;
     private final int centerZ;
     private final int size;

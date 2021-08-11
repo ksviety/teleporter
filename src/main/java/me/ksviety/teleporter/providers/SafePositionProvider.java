@@ -1,6 +1,6 @@
 package me.ksviety.teleporter.providers;
 
-import me.ksviety.teleporter.IPositionProvider;
+import me.ksviety.teleporter.PositionProvider;
 import me.ksviety.teleporter.ShiftAxis;
 import me.ksviety.teleporter.ShiftedVec3i;
 import me.ksviety.teleporter.exceptions.CannotFindClosetSafePositionException;
@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * Can throw <a>CannotFindClosestSafePositionException</a>
  */
-public class SafePositionProvider implements IPositionProvider {
+public class SafePositionProvider implements PositionProvider {
     private final static ShiftAxis[] SHIFT_DIRECTIONS = new ShiftAxis[] {
             ShiftAxis.Forward,
             ShiftAxis.Backward,
@@ -22,14 +22,14 @@ public class SafePositionProvider implements IPositionProvider {
             ShiftAxis.Left
     };
 
-    private final IPositionProvider positionProvider;
+    private final PositionProvider positionProvider;
     private final World world;
     private final Collection<String> bannedBlocks;
     private final int shiftRadius;
     private final int maxSearchIterations;
 
     public SafePositionProvider(
-            IPositionProvider positionProvider,
+            PositionProvider positionProvider,
             World world,
             Collection<String> bannedBlocks,
             int shiftRadius,
