@@ -31,7 +31,7 @@ class Config private constructor(
             val size = config.getInt("size")
             val bannedBlocksArray = config.getJSONArray("bannedBlocks")
             val shiftRadius = config.getInt("shiftRadius")
-            val searchIterationsLimit = config.getInt("sea rchIterationsLimit")
+            val searchIterationsLimit = config.getInt("searchIterationsLimit")
             val bannedBlocks: MutableSet<String> = HashSet()
 
             for (i in bannedBlocksArray.toList().indices) {
