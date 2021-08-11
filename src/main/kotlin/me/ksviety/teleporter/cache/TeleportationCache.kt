@@ -1,9 +1,7 @@
 package me.ksviety.teleporter.cache
 
-import me.ksviety.teleporter.Cache
-
-abstract class TeleportationCache protected constructor(private val _alreadyTeleportedPlayers: MutableSet<String>) :
-    Cache {
+class TeleportationCache(alreadyTeleportedPlayers: Set<String>) {
+    private val _alreadyTeleportedPlayers = HashSet(alreadyTeleportedPlayers)
 
     val alreadyTeleportedPlayers: Collection<String>
         get() {
