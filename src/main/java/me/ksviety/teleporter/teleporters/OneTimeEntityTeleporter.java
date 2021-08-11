@@ -1,16 +1,16 @@
 package me.ksviety.teleporter.teleporters;
 
-import me.ksviety.teleporter.IEntityTeleporter;
+import me.ksviety.teleporter.EntityTeleporter;
 import me.ksviety.teleporter.cache.TeleportationCache;
 import net.minecraft.entity.Entity;
 
 import java.util.Collection;
 
-public class OneTimeEntityTeleporter implements IEntityTeleporter {
-    private final IEntityTeleporter entityTeleporter;
+public class OneTimeEntityTeleporter implements EntityTeleporter {
+    private final EntityTeleporter entityTeleporter;
     private final TeleportationCache cache;
 
-    public OneTimeEntityTeleporter(IEntityTeleporter entityTeleporter, TeleportationCache cache) {
+    public OneTimeEntityTeleporter(EntityTeleporter entityTeleporter, TeleportationCache cache) {
         this.entityTeleporter = entityTeleporter;
         this.cache = cache;
     }
