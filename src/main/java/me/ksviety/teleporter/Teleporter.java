@@ -5,15 +5,13 @@ import me.ksviety.teleporter.cache.TeleportationCache;
 import me.ksviety.teleporter.exceptions.CannotFindClosetSafePositionException;
 import me.ksviety.teleporter.providers.BoundRandomPositionProvider;
 import me.ksviety.teleporter.providers.SafePositionProvider;
-import me.ksviety.teleporter.teleporters.EntityTeleporter;
+import me.ksviety.teleporter.teleporters.CommandEntityTeleporter;
 import me.ksviety.teleporter.teleporters.OneTimeEntityTeleporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -25,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.UUID;
 
 @Mod(modid = Teleporter.MOD_ID, serverSideOnly = true, acceptableRemoteVersions = "*")
 public class Teleporter
@@ -57,7 +54,7 @@ public class Teleporter
             final World world = player.getEntityWorld();
 
             new OneTimeEntityTeleporter(
-                    new EntityTeleporter(
+                    new CommandEntityTeleporter(
                             new SafePositionProvider(
                                     new BoundRandomPositionProvider(
                                             config.getCenterX(),
