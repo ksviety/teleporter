@@ -13,16 +13,20 @@ import me.ksviety.teleporter.providers.BoundRandomPositionProvider
 import me.ksviety.teleporter.exceptions.CannotFindClosetSafePositionException
 import me.ksviety.teleporter.loaders.ConfigFileLoader
 import me.ksviety.teleporter.loaders.TeleportationCacheFileLoader
+import me.ksviety.teleporter.loaders.safe.SafeTeleportationCacheFileLoader
 import me.ksviety.teleporter.savers.TeleportationCacheFileSaver
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.entity.Entity
+import net.minecraft.server.MinecraftServer
+import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.Mod
+import java.io.File
 import java.net.URI
 import java.security.SecureRandom
 
-@Mod(modid = Teleporter.MOD_ID, serverSideOnly = true, acceptableRemoteVersions = "*")
-class Teleporter {
+@Mod(modid = "teleporter", serverSideOnly = true, acceptableRemoteVersions = "*")
+class TeleporterLoader {
     private lateinit var teleportationCache: TeleportationCache
     private lateinit var config: Config
 
@@ -33,13 +37,20 @@ class Teleporter {
     fun preInit(event: FMLPreInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(this)
 
-        teleportationCache = TeleportationCacheFileLoader(URI(teleportationCacheFileLocation)).load()
-        config = ConfigFileLoader(URI(configFileLocation)).load()
+        teleportationCache = SafeTeleportationCacheFileLoader(
+            File(teleportationCacheFileLocation)
+        ).load()
+
+        config = ConfigFileLoader(
+            File(configFileLocation)
+        ).load()
     }
 
     @Mod.EventHandler
     fun unload(event: FMLServerStoppingEvent) {
-        TeleportationCacheFileSaver(URI(teleportationCacheFileLocation)).save(teleportationCache)
+        TeleportationCacheFileSaver(
+            File(teleportationCacheFileLocation)
+        ).save(teleportationCache)
     }
 
     @SubscribeEvent
@@ -70,9 +81,5 @@ class Teleporter {
                 TextComponentString("Could not find any safe position to spawn, log in again.")
             )
         }
-    }
-
-    companion object {
-        const val MOD_ID = "teleporter"
     }
 }
