@@ -1,14 +1,14 @@
 package me.ksviety.teleporter.loaders
 
 import me.ksviety.teleporter.cache.TeleportationCache
-import java.net.URI
+import java.io.File
 
-class TeleportationCacheFileLoader(path: URI) : FileLoader<TeleportationCache>(path) {
+class TeleportationCacheFileLoader(file: File) : FileLoader<TeleportationCache>(file) {
 
-    override fun loadFromContent(content: String): TeleportationCache {
+    override fun loadFromContent(content: ByteArray): TeleportationCache {
         val players = hashSetOf<String>()
 
-        content.lines().forEach(players::add)
+        String(content).lines().forEach(players::add)
 
         return TeleportationCache(players)
     }

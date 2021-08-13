@@ -2,12 +2,12 @@ package me.ksviety.teleporter.loaders
 
 import com.google.gson.JsonParser
 import me.ksviety.teleporter.Config
-import java.net.URI
+import java.io.File
 
-class ConfigFileLoader(path: URI) : FileLoader<Config>(path) {
+class ConfigFileLoader(file: File) : FileLoader<Config>(file) {
 
-    override fun loadFromContent(content: String): Config {
-        val json = JsonParser().parse(content).asJsonObject
+    override fun loadFromContent(content: ByteArray): Config {
+        val json = JsonParser().parse(String(content)).asJsonObject
 
         val centerX = json.get("centerX").asInt
         val centerZ = json.get("centerZ").asInt
