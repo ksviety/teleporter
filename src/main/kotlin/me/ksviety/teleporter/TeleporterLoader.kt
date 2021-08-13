@@ -13,6 +13,7 @@ import me.ksviety.teleporter.providers.BoundRandomPositionProvider
 import me.ksviety.teleporter.exceptions.CannotFindClosetSafePositionException
 import me.ksviety.teleporter.loaders.ConfigFileLoader
 import me.ksviety.teleporter.loaders.TeleportationCacheFileLoader
+import me.ksviety.teleporter.loaders.safe.SafeConfigFileLoader
 import me.ksviety.teleporter.loaders.safe.SafeTeleportationCacheFileLoader
 import me.ksviety.teleporter.savers.TeleportationCacheFileSaver
 import net.minecraft.entity.player.EntityPlayerMP
@@ -41,7 +42,7 @@ class TeleporterLoader {
             File(teleportationCacheFileLocation)
         ).load()
 
-        config = ConfigFileLoader(
+        config = SafeConfigFileLoader(
             File(configFileLocation)
         ).load()
     }
