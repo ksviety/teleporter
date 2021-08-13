@@ -5,15 +5,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:4.+'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.+'
     }
 }
 
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
-}
-
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'kotlin'
 
 version = '1.2.0'
 group = 'me.ksviety.teleporter'
@@ -31,8 +29,6 @@ configurations {
 }
 
 dependencies {
-    compileOnly 'org.jetbrains:annotations:20.1.0'
-
     external 'org.json:json:20210307'
 
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
