@@ -1,11 +1,11 @@
 package me.ksviety.teleporter.savers
 
 import me.ksviety.teleporter.cache.TeleportationCache
-import java.net.URI
+import java.io.File
 
-class TeleportationCacheFileSaver(path: URI) : FileSaver<TeleportationCache>(path) {
+class TeleportationCacheFileSaver(file: File) : FileSaver<TeleportationCache>(file) {
 
-    override fun textFromObject(obj: TeleportationCache): String {
-        return obj.alreadyTeleportedPlayers.joinToString("\n")
+    override fun textFromContent(content: TeleportationCache): String {
+        return content.alreadyTeleportedPlayers.joinToString("\n")
     }
 }
