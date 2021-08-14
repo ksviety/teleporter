@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3i
 import me.ksviety.teleporter.ShiftAxis
 import net.minecraft.util.math.BlockPos
 import me.ksviety.teleporter.ShiftedVec3i
-import me.ksviety.teleporter.exceptions.CannotFindClosetSafePositionException
+import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
 
 /**
  * Can throw <a>CannotFindClosestSafePositionException</a>
@@ -59,7 +59,7 @@ class SafePositionProvider(
         }
 
         if (iteration >= maxSearchIterations)
-            throw CannotFindClosetSafePositionException
+            throw CannotFindClosestSafePositionException
 
         return getSafePosition(iteration + 1)
     }
