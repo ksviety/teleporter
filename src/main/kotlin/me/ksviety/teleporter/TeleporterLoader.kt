@@ -11,9 +11,9 @@ import me.ksviety.teleporter.teleporters.CommandEntityTeleporter
 import me.ksviety.teleporter.providers.SafePositionProvider
 import me.ksviety.teleporter.providers.BoundRandomPositionProvider
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
-import me.ksviety.teleporter.data.loaders.safe.SafeConfigFileLoader
-import me.ksviety.teleporter.data.loaders.safe.SafeCacheFileLoader
-import me.ksviety.teleporter.data.savers.CacheFileSaver
+import me.ksviety.teleporter.data.repository.Repository
+import me.ksviety.teleporter.data.repository.cache.CacheFileRepository
+import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.entity.Entity
@@ -28,27 +28,21 @@ class TeleporterLoader {
 
     private val teleporterContext = CoroutineScope(newSingleThreadContext(""))
 
-    private val teleportationCacheFileLocation = "./teleportation.cache"
-    private val configFileLocation = "./config/teleportation.config"
+    private val cacheRepository: Repository<Cache> = CacheFileRepository(File("./teleportation.cache"))
+    private val configRepository: Repository<Config> = ConfigFileRepository(File("./config/teleportation.config"))
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(this)
 
-        cache = SafeCacheFileLoader(
-            File(teleportationCacheFileLocation)
-        ).load()
+        cache = cacheRepository.load()
 
-        config = SafeConfigFileLoader(
-            File(configFileLocation)
-        ).load()
+        config = configRepository.load()
     }
 
     @Mod.EventHandler
     fun unload(event: FMLServerStoppingEvent) {
-        CacheFileSaver(
-            File(teleportationCacheFileLocation)
-        ).save(cache)
+        cacheRepository.save(cache)
 
         teleporterContext.cancel()
     }
