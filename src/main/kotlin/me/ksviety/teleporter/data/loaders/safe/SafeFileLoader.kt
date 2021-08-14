@@ -1,7 +1,7 @@
-package me.ksviety.teleporter.loaders.safe
+package me.ksviety.teleporter.data.loaders.safe
 
-import me.ksviety.teleporter.loaders.FileLoader
-import me.ksviety.teleporter.savers.FileSaver
+import me.ksviety.teleporter.data.loaders.FileLoader
+import me.ksviety.teleporter.data.savers.FileSaver
 import java.io.File
 import java.io.FileNotFoundException
 

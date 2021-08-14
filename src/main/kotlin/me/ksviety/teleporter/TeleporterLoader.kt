@@ -12,9 +12,9 @@ import me.ksviety.teleporter.teleporters.CommandEntityTeleporter
 import me.ksviety.teleporter.providers.SafePositionProvider
 import me.ksviety.teleporter.providers.BoundRandomPositionProvider
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
-import me.ksviety.teleporter.loaders.safe.SafeConfigFileLoader
-import me.ksviety.teleporter.loaders.safe.SafeTeleportationCacheFileLoader
-import me.ksviety.teleporter.savers.TeleportationCacheFileSaver
+import me.ksviety.teleporter.data.loaders.safe.SafeConfigFileLoader
+import me.ksviety.teleporter.data.loaders.safe.SafeTeleportationCacheFileLoader
+import me.ksviety.teleporter.data.savers.TeleportationCacheFileSaver
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.entity.Entity

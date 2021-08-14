@@ -1,8 +1,8 @@
-package me.ksviety.teleporter.loaders.safe
+package me.ksviety.teleporter.data.loaders.safe
 
 import me.ksviety.teleporter.cache.TeleportationCache
-import me.ksviety.teleporter.loaders.TeleportationCacheFileLoader
-import me.ksviety.teleporter.savers.TeleportationCacheFileSaver
+import me.ksviety.teleporter.data.loaders.TeleportationCacheFileLoader
+import me.ksviety.teleporter.data.savers.TeleportationCacheFileSaver
 import java.io.File
 
 class SafeTeleportationCacheFileLoader(file: File) : SafeFileLoader<TeleportationCache>(file, TeleportationCacheFileSaver(file)) {

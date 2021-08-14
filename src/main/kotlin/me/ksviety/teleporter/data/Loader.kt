@@ -1,4 +1,4 @@
-package me.ksviety.teleporter
+package me.ksviety.teleporter.data
 
 interface Loader<out T> {
     fun load(): T

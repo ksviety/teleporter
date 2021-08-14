@@ -1,4 +1,4 @@
-package me.ksviety.teleporter.loaders
+package me.ksviety.teleporter.data.loaders
 
 import com.google.gson.JsonParser
 import me.ksviety.teleporter.Config
