@@ -1,5 +1,6 @@
 package me.ksviety.teleporter
 
+import kotlinx.coroutines.*
 import me.ksviety.teleporter.cache.TeleportationCache
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.common.MinecraftForge
@@ -31,6 +32,8 @@ class TeleporterLoader {
     private lateinit var teleportationCache: TeleportationCache
     private lateinit var config: Config
 
+    private val teleporterContext = CoroutineScope(Dispatchers.Default)
+
     private val teleportationCacheFileLocation = "./teleportation.cache"
     private val configFileLocation = "./config/teleportation.config"
 
@@ -52,35 +55,40 @@ class TeleporterLoader {
         TeleportationCacheFileSaver(
             File(teleportationCacheFileLocation)
         ).save(teleportationCache)
+
+        teleporterContext.cancel()
     }
 
     @SubscribeEvent
     fun onPlayerLoggedIn(event: PlayerLoggedInEvent) {
         val player: Entity = event.player
 
-        try {
-            val world = player.entityWorld
-            OneTimeEntityTeleporter(
-                CommandEntityTeleporter(
-                    SafePositionProvider(
-                        BoundRandomPositionProvider(
-                            config.centerX,
-                            config.centerZ,
-                            config.size,
-                            SecureRandom()
-                        ),
-                        world,
-                        config.getBannedBlocks(),
-                        config.shiftRadius,
-                        config.searchIterationsLimit
-                    )
-                ),
-                teleportationCache
-            ).teleport(player)
-        } catch (e: CannotFindClosetSafePositionException) {
-            (player as EntityPlayerMP).connection.disconnect(
-                TextComponentString("Could not find any safe position to spawn, log in again.")
-            )
+        teleporterContext.launch {
+            try {
+                val world = player.entityWorld
+                OneTimeEntityTeleporter(
+                    CommandEntityTeleporter(
+                        SafePositionProvider(
+                            BoundRandomPositionProvider(
+                                config.centerX,
+                                config.centerZ,
+                                config.size,
+                                SecureRandom()
+                            ),
+                            world,
+                            config.getBannedBlocks(),
+                            config.shiftRadius,
+                            config.searchIterationsLimit
+                        )
+                    ),
+                    teleportationCache
+                ).teleport(player)
+            } catch (e: CannotFindClosetSafePositionException) {
+                (player as EntityPlayerMP).connection.disconnect(
+                    TextComponentString("Could not find any safe position to spawn, log in again.")
+                )
+                cancel()
+            }
         }
     }
 }
