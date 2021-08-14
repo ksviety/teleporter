@@ -6,17 +6,17 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
-import me.ksviety.teleporter.teleporters.OneTimeEntityTeleporter
-import me.ksviety.teleporter.teleporters.CommandEntityTeleporter
+import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.providers.SafePositionProvider
 import me.ksviety.teleporter.providers.BoundRandomPositionProvider
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
 import me.ksviety.teleporter.data.repository.Repository
 import me.ksviety.teleporter.data.repository.cache.CacheFileRepository
 import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
+import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
+import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
-import net.minecraft.entity.Entity
 import net.minecraftforge.fml.common.Mod
 import java.io.File
 import java.security.SecureRandom
@@ -49,13 +49,13 @@ class TeleporterLoader {
 
     @SubscribeEvent
     fun onPlayerLoggedIn(event: PlayerLoggedInEvent) {
-        val player: Entity = event.player
+        val player = event.player
 
         teleporterContext.launch {
             try {
                 val world = player.entityWorld
-                OneTimeEntityTeleporter(
-                    CommandEntityTeleporter(
+                OneTimePlayerTeleporter(
+                    PointSavingPlayerTeleporter(
                         SafePositionProvider(
                             BoundRandomPositionProvider(
                                 config.centerX,
