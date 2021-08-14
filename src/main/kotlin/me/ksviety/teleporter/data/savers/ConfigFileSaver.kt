@@ -1,4 +1,4 @@
-package me.ksviety.teleporter.savers
+package me.ksviety.teleporter.data.savers
 
 import com.google.gson.*
 import me.ksviety.teleporter.Config

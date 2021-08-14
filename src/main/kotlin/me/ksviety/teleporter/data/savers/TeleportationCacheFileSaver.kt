@@ -1,4 +1,4 @@
-package me.ksviety.teleporter.savers
+package me.ksviety.teleporter.data.savers
 
 import me.ksviety.teleporter.cache.TeleportationCache
 import java.io.File

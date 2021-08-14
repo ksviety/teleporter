@@ -1,6 +1,6 @@
-package me.ksviety.teleporter.savers
+package me.ksviety.teleporter.data.savers
 
-import me.ksviety.teleporter.Saver
+import me.ksviety.teleporter.data.Saver
 import java.io.File
 import java.io.FileWriter
 
