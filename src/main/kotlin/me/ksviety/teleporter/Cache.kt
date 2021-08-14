@@ -1,6 +1,6 @@
-package me.ksviety.teleporter.cache
+package me.ksviety.teleporter
 
-class TeleportationCache(alreadyTeleportedPlayers: Set<String>) {
+class Cache(alreadyTeleportedPlayers: Set<String>) {
     private val _alreadyTeleportedPlayers = HashSet(alreadyTeleportedPlayers)
 
     val alreadyTeleportedPlayers: Collection<String>

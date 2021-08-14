@@ -1,12 +1,12 @@
 package me.ksviety.teleporter.teleporters
 
 import me.ksviety.teleporter.EntityTeleporter
-import me.ksviety.teleporter.cache.TeleportationCache
+import me.ksviety.teleporter.Cache
 import net.minecraft.entity.Entity
 
 class OneTimeEntityTeleporter(
     private val entityTeleporter: EntityTeleporter,
-    private val cache: TeleportationCache
+    private val cache: Cache
     ) : EntityTeleporter {
 
     override fun teleport(entity: Entity) {

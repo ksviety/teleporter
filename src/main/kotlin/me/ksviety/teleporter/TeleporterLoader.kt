@@ -1,7 +1,6 @@
 package me.ksviety.teleporter
 
 import kotlinx.coroutines.*
-import me.ksviety.teleporter.cache.TeleportationCache
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent
@@ -13,8 +12,8 @@ import me.ksviety.teleporter.providers.SafePositionProvider
 import me.ksviety.teleporter.providers.BoundRandomPositionProvider
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
 import me.ksviety.teleporter.data.loaders.safe.SafeConfigFileLoader
-import me.ksviety.teleporter.data.loaders.safe.SafeTeleportationCacheFileLoader
-import me.ksviety.teleporter.data.savers.TeleportationCacheFileSaver
+import me.ksviety.teleporter.data.loaders.safe.SafeCacheFileLoader
+import me.ksviety.teleporter.data.savers.CacheFileSaver
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
 import net.minecraft.entity.Entity
@@ -24,7 +23,7 @@ import java.security.SecureRandom
 
 @Mod(modid = "teleporter", serverSideOnly = true, acceptableRemoteVersions = "*")
 class TeleporterLoader {
-    private lateinit var teleportationCache: TeleportationCache
+    private lateinit var cache: Cache
     private lateinit var config: Config
 
     private val teleporterContext = CoroutineScope(newSingleThreadContext(""))
@@ -36,7 +35,7 @@ class TeleporterLoader {
     fun preInit(event: FMLPreInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(this)
 
-        teleportationCache = SafeTeleportationCacheFileLoader(
+        cache = SafeCacheFileLoader(
             File(teleportationCacheFileLocation)
         ).load()
 
@@ -47,9 +46,9 @@ class TeleporterLoader {
 
     @Mod.EventHandler
     fun unload(event: FMLServerStoppingEvent) {
-        TeleportationCacheFileSaver(
+        CacheFileSaver(
             File(teleportationCacheFileLocation)
-        ).save(teleportationCache)
+        ).save(cache)
 
         teleporterContext.cancel()
     }
@@ -76,7 +75,7 @@ class TeleporterLoader {
                             config.searchIterationsLimit
                         )
                     ),
-                    teleportationCache
+                    cache
                 ).teleport(player)
             } catch (e: CannotFindClosestSafePositionException) {
                 (player as EntityPlayerMP).connection.disconnect(
