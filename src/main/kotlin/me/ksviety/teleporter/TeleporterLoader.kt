@@ -26,13 +26,14 @@ import net.minecraftforge.fml.common.Mod
 import java.io.File
 import java.net.URI
 import java.security.SecureRandom
+import kotlin.coroutines.CoroutineContext
 
 @Mod(modid = "teleporter", serverSideOnly = true, acceptableRemoteVersions = "*")
 class TeleporterLoader {
     private lateinit var teleportationCache: TeleportationCache
     private lateinit var config: Config
 
-    private val teleporterContext = CoroutineScope(Dispatchers.Default)
+    private val teleporterContext = CoroutineScope(newSingleThreadContext(""))
 
     private val teleportationCacheFileLocation = "./teleportation.cache"
     private val configFileLocation = "./config/teleportation.config"
