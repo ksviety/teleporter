@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 import me.ksviety.teleporter.teleporters.OneTimeEntityTeleporter
-import me.ksviety.teleporter.teleporters.CommandEntityTeleporter
+import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.providers.SafePositionProvider
 import me.ksviety.teleporter.providers.BoundRandomPositionProvider
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
@@ -55,7 +55,7 @@ class TeleporterLoader {
             try {
                 val world = player.entityWorld
                 OneTimeEntityTeleporter(
-                    CommandEntityTeleporter(
+                    EntityTeleporter(
                         SafePositionProvider(
                             BoundRandomPositionProvider(
                                 config.centerX,
