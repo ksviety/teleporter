@@ -15,6 +15,7 @@ import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
 import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
 import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
+import me.ksviety.teleporter.utilities.PlayerDisconnector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
@@ -83,9 +84,7 @@ class TeleporterLoader {
                     cache
                 ).teleport(player)
             } catch (e: CannotFindClosestSafePositionException) {
-                (player as EntityPlayerMP).connection.disconnect(
-                    TextComponentString("Could not find any safe position to spawn, log in again.")
-                )
+                PlayerDisconnector(player).disconnect(TextComponentString("Could not find any safe position to spawn, log in again."))
             } finally {
                 cancel()
             }
