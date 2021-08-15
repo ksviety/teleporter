@@ -1,16 +1,21 @@
+
 buildscript {
+    ext.kotlin_version = '1.5.20'
+
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.+'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'kotlin'
 
-version = '1.2.0'
+version = '2.0.0'
 group = 'me.ksviety.teleporter'
 archivesBaseName = 'teleporter'
 
@@ -20,30 +25,30 @@ minecraft {
     mappings channel: 'snapshot', version: '20171003-1.12'
 }
 
-configurations {
-    external
-    compile.extendsFrom external
+repositories {
+    mavenCentral()
+
+    maven { url "https://maven.shadowfacts.net/" }
 }
 
 dependencies {
-    compileOnly 'org.jetbrains:annotations:20.1.0'
-
-    external 'org.json:json:20210307'
-
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
+
+    implementation group: "net.shadowfacts", name: "Forgelin", version: "1.8.4"
 }
 
 jar {
-    manifest {
-        attributes([
-            "Specification-Title": "teleporter",
-            "Specification-Vendor": "ksviety",
-            "Specification-Version": "2",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor": "ksviety",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-    from { configurations.external.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest.attributes(
+            [
+                    "Specification-Title"     : "teleporter",
+                    "Specification-Vendor"    : "ksviety",
+                    "Specification-Version"   : "3",
+                    "Implementation-Title"    : project.name,
+                    "Implementation-Version"  : "${version}",
+                    "Implementation-Vendor"   : "ksviety",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            ]
+    )
 }
