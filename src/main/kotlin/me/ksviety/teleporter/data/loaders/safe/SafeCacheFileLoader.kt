@@ -10,5 +10,5 @@ class SafeCacheFileLoader(file: File) : SafeFileLoader<Cache>(file, CacheFileSav
 
     override fun loadFromContent(content: ByteArray) = loader.load()
 
-    override fun getDefaultContent() = Cache(emptySet())
+    override fun getDefaultContent() = Cache(emptyMap())
 }

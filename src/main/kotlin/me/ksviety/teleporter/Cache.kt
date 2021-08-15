@@ -1,14 +1,23 @@
 package me.ksviety.teleporter
 
-class Cache(alreadyTeleportedPlayers: Set<String>) {
-    private val _alreadyTeleportedPlayers = HashSet(alreadyTeleportedPlayers)
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.math.Vec3i
+import java.util.*
 
-    val alreadyTeleportedPlayers: Collection<String>
-        get() {
-            return _alreadyTeleportedPlayers
-        }
+class Cache(alreadyTeleportedPlayers: Map<String, Vec3i>) {
+    private val _alreadyTeleportedPlayers = HashMap(alreadyTeleportedPlayers)
 
-    fun addPlayerAsTeleported(name: String) {
-        _alreadyTeleportedPlayers.add(name)
+    val alreadyTeleportedPlayers: Map<String, Vec3i>
+        get() = _alreadyTeleportedPlayers
+
+    operator fun set(player: EntityPlayer, position: Vec3i) {
+        _alreadyTeleportedPlayers[player.asKey] = position
     }
+
+    operator fun get(player: EntityPlayer) = _alreadyTeleportedPlayers[player.asKey]
+
+    operator fun contains(player: EntityPlayer) = _alreadyTeleportedPlayers.containsKey(player.asKey)
+
+    private val EntityPlayer.asKey: String
+        get() = this.name
 }

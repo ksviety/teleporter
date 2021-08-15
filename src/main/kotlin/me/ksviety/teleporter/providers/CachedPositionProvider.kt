@@ -8,7 +8,7 @@ import me.ksviety.teleporter.PositionProvider
  * the cached value instead of recalculating
  */
 class CachedPositionProvider(private val original: PositionProvider) : PositionProvider {
-    private val cache by lazy(original::provide)
+    private val cache by lazy { original.provide() }
 
     override fun provide() = cache
 }

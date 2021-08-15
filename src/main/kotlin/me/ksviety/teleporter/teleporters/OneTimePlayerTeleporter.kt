@@ -10,13 +10,10 @@ open class OneTimePlayerTeleporter(
     ) : Teleporter<EntityPlayer> {
 
     override fun teleport(obj: EntityPlayer) {
-        val name = obj.name
-        val teleported = cache.alreadyTeleportedPlayers
-
-        if (teleported.contains(name))
+        if (obj in cache)
             return
 
         entityTeleporter.teleport(obj)
-        cache.addPlayerAsTeleported(name)
+        cache[obj] = obj.position
     }
 }

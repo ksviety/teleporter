@@ -50,6 +50,8 @@ class SafePositionProvider(
                     )
                 )
 
+                println("Looking at: ${topBlockPosition as Vec3i}")
+
                 // Shift up by one to avoid spawning inside the block
                 val shiftedPosition = ShiftedVec3i.shift(topBlockPosition, 1, ShiftAxis.Up)
 
