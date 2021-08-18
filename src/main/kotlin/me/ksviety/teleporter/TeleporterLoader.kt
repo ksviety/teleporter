@@ -68,23 +68,23 @@ class TeleporterLoader {
             try {
                 val world = (player as Entity).entityWorld
                 OneTimePlayerTeleporter(
-                    StunningPlayerTeleporter(
+                    cache = cache,
+                    entityTeleporter = StunningPlayerTeleporter(
                         PointSavingPlayerTeleporter(
                             SafePositionProvider(
-                                BoundRandomPositionProvider(
+                                world = world,
+                                bannedBlocks = config.getBannedBlocks(),
+                                shiftRadius = config.shiftRadius,
+                                maxSearchIterations = config.searchIterationsLimit,
+                                positionProvider = BoundRandomPositionProvider(
                                     config.centerX,
                                     config.centerZ,
                                     config.size,
                                     SecureRandom()
-                                ),
-                                world,
-                                config.getBannedBlocks(),
-                                config.shiftRadius,
-                                config.searchIterationsLimit
+                                )
                             )
                         )
-                    ),
-                    cache
+                    )
                 ).teleport(player)
             } catch (e: CannotFindClosestSafePositionException) {
                 PlayerDisconnector(player).disconnect(TextComponentString("Could not find any safe position to spawn, log in again."))
