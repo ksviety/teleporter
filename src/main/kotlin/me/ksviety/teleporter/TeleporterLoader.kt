@@ -70,7 +70,8 @@ class TeleporterLoader {
                 OneTimePlayerTeleporter(
                     cache = cache,
                     original = StunningPlayerTeleporter(
-                        PointSavingPlayerTeleporter(
+                        spawn = config.spawn,
+                        original = PointSavingPlayerTeleporter(
                             SafePositionProvider(
                                 world = world,
                                 bannedBlocks = config.getBannedBlocks(),
