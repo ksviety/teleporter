@@ -1,5 +1,7 @@
 package me.ksviety.teleporter.providers
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import me.ksviety.teleporter.PositionProvider
 import net.minecraft.world.World
 import net.minecraft.util.math.Vec3i
@@ -36,6 +38,7 @@ class SafePositionProvider(
         }
 
     override fun provide(): Vec3i {
+        runBlocking { delay(10_000) }
         return getSafePosition()
     }
 

@@ -15,6 +15,7 @@ import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
 import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
 import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
+import me.ksviety.teleporter.teleporters.StunningPlayerTeleporter
 import me.ksviety.teleporter.utilities.PlayerDisconnector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
@@ -67,21 +68,24 @@ class TeleporterLoader {
             try {
                 val world = (player as Entity).entityWorld
                 OneTimePlayerTeleporter(
-                    PointSavingPlayerTeleporter(
-                        SafePositionProvider(
-                            BoundRandomPositionProvider(
-                                config.centerX,
-                                config.centerZ,
-                                config.size,
-                                SecureRandom()
-                            ),
-                            world,
-                            config.getBannedBlocks(),
-                            config.shiftRadius,
-                            config.searchIterationsLimit
+                    cache = cache,
+                    original = StunningPlayerTeleporter(
+                        spawn = config.spawn,
+                        original = PointSavingPlayerTeleporter(
+                            SafePositionProvider(
+                                world = world,
+                                bannedBlocks = config.getBannedBlocks(),
+                                shiftRadius = config.shiftRadius,
+                                maxSearchIterations = config.searchIterationsLimit,
+                                positionProvider = BoundRandomPositionProvider(
+                                    config.centerX,
+                                    config.centerZ,
+                                    config.size,
+                                    SecureRandom()
+                                )
+                            )
                         )
-                    ),
-                    cache
+                    )
                 ).teleport(player)
             } catch (e: CannotFindClosestSafePositionException) {
                 PlayerDisconnector(player).disconnect(TextComponentString("Could not find any safe position to spawn, log in again."))
