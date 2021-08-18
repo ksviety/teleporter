@@ -15,6 +15,7 @@ import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
 import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
 import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
+import me.ksviety.teleporter.teleporters.StunningPlayerTeleporter
 import me.ksviety.teleporter.utilities.PlayerDisconnector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
@@ -67,18 +68,20 @@ class TeleporterLoader {
             try {
                 val world = (player as Entity).entityWorld
                 OneTimePlayerTeleporter(
-                    PointSavingPlayerTeleporter(
-                        SafePositionProvider(
-                            BoundRandomPositionProvider(
-                                config.centerX,
-                                config.centerZ,
-                                config.size,
-                                SecureRandom()
-                            ),
-                            world,
-                            config.getBannedBlocks(),
-                            config.shiftRadius,
-                            config.searchIterationsLimit
+                    StunningPlayerTeleporter(
+                        PointSavingPlayerTeleporter(
+                            SafePositionProvider(
+                                BoundRandomPositionProvider(
+                                    config.centerX,
+                                    config.centerZ,
+                                    config.size,
+                                    SecureRandom()
+                                ),
+                                world,
+                                config.getBannedBlocks(),
+                                config.shiftRadius,
+                                config.searchIterationsLimit
+                            )
                         )
                     ),
                     cache
