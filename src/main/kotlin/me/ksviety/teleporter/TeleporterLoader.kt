@@ -69,7 +69,7 @@ class TeleporterLoader {
                 val world = (player as Entity).entityWorld
                 OneTimePlayerTeleporter(
                     cache = cache,
-                    entityTeleporter = StunningPlayerTeleporter(
+                    original = StunningPlayerTeleporter(
                         PointSavingPlayerTeleporter(
                             SafePositionProvider(
                                 world = world,

@@ -5,7 +5,7 @@ import me.ksviety.teleporter.Teleporter
 import net.minecraft.entity.player.EntityPlayer
 
 open class OneTimePlayerTeleporter(
-    private val entityTeleporter: Teleporter<EntityPlayer>,
+    private val original: Teleporter<EntityPlayer>,
     private val cache: Cache
     ) : Teleporter<EntityPlayer> {
 
@@ -13,7 +13,7 @@ open class OneTimePlayerTeleporter(
         if (obj in cache)
             return
 
-        entityTeleporter.teleport(obj)
+        original.teleport(obj)
         cache[obj] = obj.position
     }
 }
