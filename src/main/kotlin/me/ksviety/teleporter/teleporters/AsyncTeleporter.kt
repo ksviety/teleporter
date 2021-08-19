@@ -10,14 +10,14 @@ abstract class AsyncTeleporter<in T>(
     private val teleporter: Teleporter<T>,
     ) : Teleporter<T> {
 
-    protected abstract fun onTeleportationFailed(cause: TeleportationException)
+    protected abstract fun onTeleportationFailed(target: T, cause: TeleportationException)
 
     final override fun teleport(obj: T) {
         scope.launch {
             try {
                 teleporter.teleport(obj)
             } catch (exception: TeleportationException) {
-                onTeleportationFailed(exception)
+                onTeleportationFailed(obj, exception)
             }
         }
     }
