@@ -12,10 +12,8 @@ import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
 import me.ksviety.teleporter.data.repository.Repository
 import me.ksviety.teleporter.data.repository.cache.CacheFileRepository
 import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
-import me.ksviety.teleporter.teleporters.EntityTeleporter
-import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
-import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
-import me.ksviety.teleporter.teleporters.StunningPlayerTeleporter
+import me.ksviety.teleporter.teleporters.*
+import me.ksviety.teleporter.teleporters.failHandlers.DisconnectingTeleportationFailHandler
 import me.ksviety.teleporter.utilities.PlayerDisconnector
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayerMP
@@ -64,34 +62,32 @@ class TeleporterLoader {
     fun onPlayerLoggedIn(event: PlayerLoggedInEvent) {
         val player = event.player
 
-        teleporterContext.launch {
-            try {
-                val world = (player as Entity).entityWorld
-                OneTimePlayerTeleporter(
-                    cache = cache,
-                    original = StunningPlayerTeleporter(
-                        spawn = config.spawn,
-                        original = PointSavingPlayerTeleporter(
-                            SafePositionProvider(
-                                world = world,
-                                bannedBlocks = config.getBannedBlocks(),
-                                shiftRadius = config.shiftRadius,
-                                maxSearchIterations = config.searchIterationsLimit,
-                                positionProvider = BoundRandomPositionProvider(
-                                    config.centerX,
-                                    config.centerZ,
-                                    config.size,
-                                    SecureRandom()
-                                )
+        val world = (player as Entity).entityWorld
+        OneTimePlayerTeleporter(
+            cache = cache,
+            original = AsyncTeleporter(
+                scope = teleporterContext,
+                teleportationFailHandler = DisconnectingTeleportationFailHandler(
+                    "Could not find any safe point to spawn, log in again"
+                ),
+                teleporter = StunningPlayerTeleporter(
+                    spawn = config.spawn,
+                    original = PointSavingPlayerTeleporter(
+                        SafePositionProvider(
+                            world = world,
+                            bannedBlocks = config.getBannedBlocks(),
+                            shiftRadius = config.shiftRadius,
+                            maxSearchIterations = config.searchIterationsLimit,
+                            positionProvider = BoundRandomPositionProvider(
+                                config.centerX,
+                                config.centerZ,
+                                config.size,
+                                SecureRandom()
                             )
                         )
                     )
-                ).teleport(player)
-            } catch (e: CannotFindClosestSafePositionException) {
-                PlayerDisconnector(player).disconnect(TextComponentString("Could not find any safe position to spawn, log in again."))
-            } finally {
-                cancel()
-            }
-        }
+                )
+            )
+        ).teleport(player)
     }
 }
