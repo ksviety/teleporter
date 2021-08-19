@@ -1,9 +1,5 @@
 package me.ksviety.teleporter.exceptions
 
-import net.minecraft.entity.player.EntityPlayer
+import me.ksviety.teleporter.exceptions.TeleporterException
 
-sealed class TeleportationException(
-    val player: EntityPlayer,
-    message: String? = null,
-    cause: Throwable? = null
-) : TeleporterException(message, cause)
+class TeleportationException(message: String?, cause: Throwable?) : TeleporterException(message, cause)
