@@ -1,5 +1,7 @@
 package me.ksviety.teleporter
 
+import com.google.gson.JsonParser
+import com.google.gson.stream.JsonReader
 import kotlinx.coroutines.*
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.common.MinecraftForge
@@ -22,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
 import net.minecraftforge.fml.common.Mod
 import java.io.File
+import java.io.FileReader
 import java.security.SecureRandom
 import java.util.*
 
@@ -33,7 +36,6 @@ class TeleporterLoader {
     private val teleporterContext = CoroutineScope(newSingleThreadContext(""))
 
     private val cacheRepository: Repository<Cache> = CacheFileRepository(File("./teleportation.cache"))
-    private val configRepository: Repository<Config> = ConfigFileRepository(File("./config/teleportation.config"))
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
@@ -41,7 +43,17 @@ class TeleporterLoader {
 
         cache = cacheRepository.load()
 
-        config = configRepository.load()
+        config = CachedConfig(
+            JsonConfig(
+                JsonParser().parse(
+                    JsonReader(
+                        FileReader(
+                            File("./config/teleporter.config")
+                        )
+                    )
+                ).asJsonObject
+            )
+        )
     }
 
     @Mod.EventHandler
@@ -70,17 +82,17 @@ class TeleporterLoader {
                 OneTimePlayerTeleporter(
                     cache = cache,
                     original = StunningPlayerTeleporter(
-                        spawn = config.spawn,
+                        spawn = config.readSpawnPosition(),
                         original = PointSavingPlayerTeleporter(
                             SafePositionProvider(
                                 world = world,
-                                bannedBlocks = config.getBannedBlocks(),
-                                shiftRadius = config.shiftRadius,
-                                maxSearchIterations = config.searchIterationsLimit,
+                                bannedBlocks = config.readBannedBlocks(),
+                                shiftRadius = config.readShiftRadius(),
+                                maxSearchIterations = config.readSearchIterationsLimit(),
                                 positionProvider = BoundRandomPositionProvider(
-                                    config.centerX,
-                                    config.centerZ,
-                                    config.size,
+                                    config.readCenterX(),
+                                    config.readCenterZ(),
+                                    config.readSize(),
                                     SecureRandom()
                                 )
                             )
