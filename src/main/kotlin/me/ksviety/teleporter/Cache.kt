@@ -9,4 +9,6 @@ interface Cache {
     fun recordPlayer(name: String, spawn: Vec3i)
 
     fun contains(name: String): Boolean
+
+    fun save()
 }
