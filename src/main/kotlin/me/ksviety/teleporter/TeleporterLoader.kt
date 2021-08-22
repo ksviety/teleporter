@@ -8,19 +8,17 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.*;
-import me.ksviety.teleporter.providers.SafePositionProvider
-import me.ksviety.teleporter.providers.BoundRandomPositionProvider
+import me.ksviety.teleporter.position.SafePosition
+import me.ksviety.teleporter.position.BoundRandomPosition
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
 import me.ksviety.teleporter.data.repository.Repository
 import me.ksviety.teleporter.data.repository.cache.CacheFileRepository
-import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
 import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
 import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
 import me.ksviety.teleporter.teleporters.StunningPlayerTeleporter
 import me.ksviety.teleporter.utilities.PlayerDisconnector
 import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
 import net.minecraftforge.fml.common.Mod
 import java.io.File
@@ -84,12 +82,12 @@ class TeleporterLoader {
                     original = StunningPlayerTeleporter(
                         spawn = config.readSpawnPosition(),
                         original = PointSavingPlayerTeleporter(
-                            SafePositionProvider(
+                            SafePosition(
                                 world = world,
                                 bannedBlocks = config.readBannedBlocks(),
                                 shiftRadius = config.readShiftRadius(),
                                 maxSearchIterations = config.readSearchIterationsLimit(),
-                                positionProvider = BoundRandomPositionProvider(
+                                positionProvider = BoundRandomPosition(
                                     config.readCenterX(),
                                     config.readCenterZ(),
                                     config.readSize(),

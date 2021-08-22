@@ -1,8 +1,8 @@
-package me.ksviety.teleporter.providers
+package me.ksviety.teleporter.position
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import me.ksviety.teleporter.PositionProvider
+import me.ksviety.teleporter.Position
 import net.minecraft.world.World
 import net.minecraft.util.math.Vec3i
 import me.ksviety.teleporter.ShiftAxis
@@ -13,13 +13,13 @@ import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
 /**
  * Can throw <a>CannotFindClosestSafePositionException</a>
  */
-class SafePositionProvider(
-    private val positionProvider: PositionProvider,
+class SafePosition(
+    private val position: Position,
     private val world: World,
     private val bannedBlocks: Collection<String>,
     private val shiftRadius: Int,
     private val maxSearchIterations: Int
-) : PositionProvider {
+) : Position {
     private val Vec3i.isSafe: Boolean
         get() {
             val positionBelowPlayer = BlockPos(
@@ -37,13 +37,13 @@ class SafePositionProvider(
             return true
         }
 
-    override fun provide(): Vec3i {
+    override fun getValue(): Vec3i {
         runBlocking { delay(10_000) }
         return getSafePosition()
     }
 
     private fun getSafePosition(iteration: Int): Vec3i {
-        val position = positionProvider.provide()
+        val position = position.getValue()
 
         for (shift in 0 until shiftRadius) {
             for (axis in SHIFT_DIRECTIONS) {
