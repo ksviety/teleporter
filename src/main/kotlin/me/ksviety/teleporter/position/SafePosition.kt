@@ -38,7 +38,6 @@ class SafePosition(
         }
 
     override fun getValue(): Vec3i {
-        runBlocking { delay(10_000) }
         return getSafePosition()
     }
 
