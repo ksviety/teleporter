@@ -11,8 +11,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.*;
 import me.ksviety.teleporter.position.SafePosition
 import me.ksviety.teleporter.position.BoundRandomPosition
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
-import me.ksviety.teleporter.data.repository.Repository
-import me.ksviety.teleporter.data.repository.cache.CacheFileRepository
 import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
 import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
