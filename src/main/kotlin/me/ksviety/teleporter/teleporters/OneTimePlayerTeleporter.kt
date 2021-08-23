@@ -5,15 +5,15 @@ import me.ksviety.teleporter.Teleporter
 import net.minecraft.entity.player.EntityPlayer
 
 open class OneTimePlayerTeleporter(
+    private val cache: Cache,
     private val original: Teleporter<EntityPlayer>,
-    private val cache: Cache
     ) : Teleporter<EntityPlayer> {
 
     override fun teleport(obj: EntityPlayer) {
-        if (obj in cache)
+        if (cache.contains(obj.name))
             return
 
         original.teleport(obj)
-        cache[obj] = obj.position
+        cache.recordPlayer(obj.name, obj.position)
     }
 }
