@@ -33,13 +33,13 @@ class TeleporterLoader {
 
     private val teleporterContext = CoroutineScope(newSingleThreadContext(""))
 
-    private val cacheRepository: Repository<Cache> = CacheFileRepository(File("./teleportation.cache"))
-
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(this)
 
-        cache = cacheRepository.load()
+        cache = FileCache(
+            File("teleportation.cache")
+        )
 
         config = CachedConfig(
             JsonConfig(
@@ -56,7 +56,7 @@ class TeleporterLoader {
 
     @Mod.EventHandler
     fun unload(event: FMLServerStoppingEvent) {
-        cacheRepository.save(cache)
+        cache.save()
 
         teleporterContext.cancel()
     }
@@ -66,7 +66,7 @@ class TeleporterLoader {
         val player = event.player
 
         if (Objects.isNull(player.getBedLocation())) {
-            EntityTeleporter { cache[player]!! }.teleport(player)
+            EntityTeleporter { cache.readPlayers()[player.name]!! }.teleport(player)
         }
     }
 
@@ -87,7 +87,7 @@ class TeleporterLoader {
                                 bannedBlocks = config.readBannedBlocks(),
                                 shiftRadius = config.readShiftRadius(),
                                 maxSearchIterations = config.readSearchIterationsLimit(),
-                                positionProvider = BoundRandomPosition(
+                                position = BoundRandomPosition(
                                     config.readCenterX(),
                                     config.readCenterZ(),
                                     config.readSize(),
