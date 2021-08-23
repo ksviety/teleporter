@@ -4,10 +4,12 @@ import me.ksviety.teleporter.Config
 import me.ksviety.teleporter.Position
 import net.minecraft.world.World
 import net.minecraft.util.math.Vec3i
-import me.ksviety.teleporter.ShiftAxis
 import net.minecraft.util.math.BlockPos
-import me.ksviety.teleporter.ShiftedVec3i
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
+import me.ksviety.teleporter.position.shift.AplicatalShift
+import me.ksviety.teleporter.position.shift.HorizontalShift
+import me.ksviety.teleporter.position.shift.ShiftedPosition
+import me.ksviety.teleporter.position.shift.VerticalShift
 
 /**
  * Can throw <a>CannotFindClosestSafePositionException</a>
@@ -17,45 +19,30 @@ class SafePosition(
     private val world: World,
     private val position: Position,
 ) : Position {
-    private val Vec3i.isSafe: Boolean
-        get() {
-            val positionBelowPlayer = BlockPos(
-                ShiftedVec3i.shift(this, 1, ShiftAxis.Down)
-            )
-
-            if (world.isAirBlock(positionBelowPlayer))
-                return false
-
-            val name = world.getBlockState(positionBelowPlayer).block.registryName?.resourcePath ?: return false
-
-            if (config.readBannedBlocks().contains(name))
-                return false
-
-            return true
-        }
 
     override fun convertToVec3i(): Vec3i {
-        return getSafePosition()
+        return getSafePosition().convertToVec3i()
     }
 
-    private fun getSafePosition(iteration: Int): Vec3i {
-        val position = position.convertToVec3i()
+    private fun getSafePosition(iteration: Int): Position {
+        val shiftRadius = config.readShiftRadius()
 
-        for (shift in 0 until config.readShiftRadius()) {
-            for (axis in SHIFT_DIRECTIONS) {
-                val topBlockPosition = world.getTopSolidOrLiquidBlock(
-                    BlockPos(
-                        ShiftedVec3i.shift(position, shift, axis)
-                    )
+        for (length in -shiftRadius..shiftRadius) {
+            listOf(
+                ShiftedPosition(
+                    HorizontalShift(length),
+                    position
+                ),
+                ShiftedPosition(
+                    AplicatalShift(length),
+                    position
                 )
-
-                println("Looking at: ${topBlockPosition as Vec3i}")
-
-                // Shift up by one to avoid spawning inside the block
-                val shiftedPosition = ShiftedVec3i.shift(topBlockPosition, 1, ShiftAxis.Up)
-
-                if (shiftedPosition.isSafe)
-                    return shiftedPosition
+            ).forEach {
+                if (isSafe(it))
+                    return ShiftedPosition(
+                        VerticalShift(1),
+                        it
+                    )
             }
         }
 
@@ -67,12 +54,17 @@ class SafePosition(
 
     private fun getSafePosition() = getSafePosition(0)
 
-    companion object {
-        private val SHIFT_DIRECTIONS = arrayOf(
-            ShiftAxis.Forward,
-            ShiftAxis.Backward,
-            ShiftAxis.Right,
-            ShiftAxis.Left
-        )
+    private fun isSafe(position: Position): Boolean {
+        val block = BlockPos(position.convertToVec3i())
+
+        if (world.isAirBlock(block))
+            return false
+
+        val name = world.getBlockState(block).block.registryName?.resourcePath ?: return false
+
+        if (config.readBannedBlocks().contains(name))
+            return false
+
+        return true
     }
 }
