@@ -11,7 +11,7 @@ class PointSavingPlayerTeleporter(provider: Position) : Teleporter<EntityPlayer>
     private val teleporter = EntityTeleporter(cachedProvider)
 
     override fun teleport(obj: EntityPlayer) {
-        val position = cachedProvider.getValue()
+        val position = cachedProvider.convertToVec3i()
 
         obj.setSpawnPoint(BlockPos(position), false)
 

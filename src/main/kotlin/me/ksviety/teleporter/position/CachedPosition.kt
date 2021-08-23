@@ -8,7 +8,7 @@ import me.ksviety.teleporter.Position
  * the cached value instead of recalculating
  */
 class CachedPosition(private val original: Position) : Position {
-    private val cache by lazy { original.getValue() }
+    private val cache by lazy { original.convertToVec3i() }
 
-    override fun getValue() = cache
+    override fun convertToVec3i() = cache
 }

@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity
 class EntityTeleporter(private val position: Position) : Teleporter<Entity> {
 
     override fun teleport(obj: Entity) {
-        val position = position.getValue()
+        val position = position.convertToVec3i()
 
         val x = position.x.toDouble()
         val y = position.y.toDouble()

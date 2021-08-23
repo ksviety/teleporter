@@ -12,7 +12,7 @@ class BoundRandomPosition(
     private val randomCoordinate: Double
         get() = random.nextInt(config.readSize()).toDouble() / config.readSize().toDouble()
 
-    override fun getValue(): Vec3i {
+    override fun convertToVec3i(): Vec3i {
         val centerX = config.readCenterX()
         val centerZ = config.readCenterZ()
         val size = config.readSize()

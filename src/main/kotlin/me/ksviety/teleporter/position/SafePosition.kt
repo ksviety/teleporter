@@ -34,12 +34,12 @@ class SafePosition(
             return true
         }
 
-    override fun getValue(): Vec3i {
+    override fun convertToVec3i(): Vec3i {
         return getSafePosition()
     }
 
     private fun getSafePosition(iteration: Int): Vec3i {
-        val position = position.getValue()
+        val position = position.convertToVec3i()
 
         for (shift in 0 until config.readShiftRadius()) {
             for (axis in SHIFT_DIRECTIONS) {
