@@ -81,11 +81,9 @@ class TeleporterLoader {
                         spawn = config.readSpawnPosition(),
                         original = PointSavingPlayerTeleporter(
                             SafePosition(
-                                world = world,
-                                bannedBlocks = config.readBannedBlocks(),
-                                shiftRadius = config.readShiftRadius(),
-                                maxSearchIterations = config.readSearchIterationsLimit(),
-                                position = BoundRandomPosition(
+                                config,
+                                world,
+                                BoundRandomPosition(
                                     config,
                                     SecureRandom()
                                 )

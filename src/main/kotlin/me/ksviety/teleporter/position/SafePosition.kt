@@ -1,7 +1,6 @@
 package me.ksviety.teleporter.position
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import me.ksviety.teleporter.Config
 import me.ksviety.teleporter.Position
 import net.minecraft.world.World
 import net.minecraft.util.math.Vec3i
@@ -14,11 +13,9 @@ import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
  * Can throw <a>CannotFindClosestSafePositionException</a>
  */
 class SafePosition(
-    private val position: Position,
+    private val config: Config,
     private val world: World,
-    private val bannedBlocks: Collection<String>,
-    private val shiftRadius: Int,
-    private val maxSearchIterations: Int
+    private val position: Position,
 ) : Position {
     private val Vec3i.isSafe: Boolean
         get() {
@@ -31,7 +28,7 @@ class SafePosition(
 
             val name = world.getBlockState(positionBelowPlayer).block.registryName?.resourcePath ?: return false
 
-            if (bannedBlocks.contains(name))
+            if (config.readBannedBlocks().contains(name))
                 return false
 
             return true
@@ -44,7 +41,7 @@ class SafePosition(
     private fun getSafePosition(iteration: Int): Vec3i {
         val position = position.getValue()
 
-        for (shift in 0 until shiftRadius) {
+        for (shift in 0 until config.readShiftRadius()) {
             for (axis in SHIFT_DIRECTIONS) {
                 val topBlockPosition = world.getTopSolidOrLiquidBlock(
                     BlockPos(
@@ -62,7 +59,7 @@ class SafePosition(
             }
         }
 
-        if (iteration >= maxSearchIterations)
+        if (iteration >= config.readSearchIterationsLimit())
             throw CannotFindClosestSafePositionException
 
         return getSafePosition(iteration + 1)
