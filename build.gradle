@@ -15,7 +15,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'kotlin'
 
-version = '2.0.0'
+version = '2.1.0'
 group = 'me.ksviety.teleporter'
 archivesBaseName = 'teleporter'
 
@@ -44,7 +44,7 @@ jar {
             [
                     "Specification-Title"     : "teleporter",
                     "Specification-Vendor"    : "ksviety",
-                    "Specification-Version"   : "3",
+                    "Specification-Version"   : "4",
                     "Implementation-Title"    : project.name,
                     "Implementation-Version"  : "${version}",
                     "Implementation-Vendor"   : "ksviety",
