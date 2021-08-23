@@ -1,26 +1,28 @@
 package me.ksviety.teleporter
 
+import com.google.gson.JsonParser
+import com.google.gson.stream.JsonReader
 import kotlinx.coroutines.*
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.*;
-import me.ksviety.teleporter.providers.SafePositionProvider
-import me.ksviety.teleporter.providers.BoundRandomPositionProvider
+import me.ksviety.teleporter.position.SafePosition
+import me.ksviety.teleporter.position.BoundRandomPosition
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
-import me.ksviety.teleporter.data.repository.Repository
-import me.ksviety.teleporter.data.repository.cache.CacheFileRepository
-import me.ksviety.teleporter.data.repository.config.ConfigFileRepository
+import me.ksviety.teleporter.position.BoundPosition
+import me.ksviety.teleporter.position.boundary.ThreeDimensionalBoundary
 import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
 import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
-import me.ksviety.teleporter.utilities.PlayerDisconnector
+import me.ksviety.teleporter.teleporters.StunningPlayerTeleporter
+import me.ksviety.teleporter.utilities.PlayerConnection
 import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.TextComponentString
 import net.minecraftforge.fml.common.Mod
 import java.io.File
+import java.io.FileReader
 import java.security.SecureRandom
 import java.util.*
 
@@ -31,21 +33,30 @@ class TeleporterLoader {
 
     private val teleporterContext = CoroutineScope(newSingleThreadContext(""))
 
-    private val cacheRepository: Repository<Cache> = CacheFileRepository(File("./teleportation.cache"))
-    private val configRepository: Repository<Config> = ConfigFileRepository(File("./config/teleportation.config"))
-
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(this)
 
-        cache = cacheRepository.load()
+        cache = FileCache(
+            File("teleportation.cache")
+        )
 
-        config = configRepository.load()
+        config = CachedConfig(
+            JsonConfig(
+                JsonParser().parse(
+                    JsonReader(
+                        FileReader(
+                            File("./config/teleporter.config")
+                        )
+                    )
+                ).asJsonObject
+            )
+        )
     }
 
     @Mod.EventHandler
     fun unload(event: FMLServerStoppingEvent) {
-        cacheRepository.save(cache)
+        cache.save()
 
         teleporterContext.cancel()
     }
@@ -55,7 +66,7 @@ class TeleporterLoader {
         val player = event.player
 
         if (Objects.isNull(player.getBedLocation())) {
-            EntityTeleporter { cache[player]!! }.teleport(player)
+            EntityTeleporter { cache.readPlayers()[player.name]!! }.teleport(player)
         }
     }
 
@@ -67,24 +78,35 @@ class TeleporterLoader {
             try {
                 val world = (player as Entity).entityWorld
                 OneTimePlayerTeleporter(
-                    PointSavingPlayerTeleporter(
-                        SafePositionProvider(
-                            BoundRandomPositionProvider(
-                                config.centerX,
-                                config.centerZ,
-                                config.size,
-                                SecureRandom()
-                            ),
-                            world,
-                            config.getBannedBlocks(),
-                            config.shiftRadius,
-                            config.searchIterationsLimit
+                    cache,
+                    StunningPlayerTeleporter(
+                        config.readSpawnPosition(),
+                        PointSavingPlayerTeleporter(
+                            BoundPosition(
+                                ThreeDimensionalBoundary(
+                                    IntRange(
+                                        config.readCenterX() - (config.readSize() / 2),
+                                        config.readCenterX() + (config.readSize() / 2)
+                                    ),
+                                    IntRange(0, 255),IntRange(
+                                        config.readCenterZ() - (config.readSize() / 2),
+                                        config.readCenterZ() + (config.readSize() / 2)
+                                    )
+                                ),
+                                SafePosition(
+                                    config,
+                                    world,
+                                    BoundRandomPosition(
+                                        config,
+                                        SecureRandom()
+                                    )
+                                )
+                            )
                         )
-                    ),
-                    cache
+                    )
                 ).teleport(player)
             } catch (e: CannotFindClosestSafePositionException) {
-                PlayerDisconnector(player).disconnect(TextComponentString("Could not find any safe position to spawn, log in again."))
+                PlayerConnection(player).close(TextComponentString("Could not find any safe position to spawn, log in again."))
             } finally {
                 cancel()
             }

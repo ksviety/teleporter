@@ -4,8 +4,8 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.text.ITextComponent
 
-class PlayerDisconnector(player: EntityPlayer) {
+class PlayerConnection(player: EntityPlayer) {
     private val connection = (player as EntityPlayerMP).connection
 
-    fun disconnect(reason: ITextComponent) = connection.disconnect(reason)
+    fun close(reason: ITextComponent) = connection.disconnect(reason)
 }

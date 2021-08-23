@@ -1,19 +1,22 @@
-package me.ksviety.teleporter.providers
+package me.ksviety.teleporter.position
 
-import me.ksviety.teleporter.PositionProvider
+import me.ksviety.teleporter.Config
+import me.ksviety.teleporter.Position
 import net.minecraft.util.math.Vec3i
 import java.util.*
 
-class BoundRandomPositionProvider(
-    private val centerX: Int,
-    private val centerZ: Int,
-    private val size: Int,
+class BoundRandomPosition(
+    private val config: Config,
     private val random: Random
-) : PositionProvider {
+) : Position {
     private val randomCoordinate: Double
-        get() = random.nextInt(size).toDouble() / size.toDouble()
+        get() = random.nextInt(config.readSize()).toDouble() / config.readSize().toDouble()
 
-    override fun provide(): Vec3i {
+    override fun convertToVec3i(): Vec3i {
+        val centerX = config.readCenterX()
+        val centerZ = config.readCenterZ()
+        val size = config.readSize()
+
         val x = randomCoordinate
         val z = randomCoordinate
         val y = randomCoordinate

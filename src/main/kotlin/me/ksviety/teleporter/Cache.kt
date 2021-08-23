@@ -1,23 +1,14 @@
 package me.ksviety.teleporter
 
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.Vec3i
-import java.util.*
 
-class Cache(alreadyTeleportedPlayers: Map<String, Vec3i>) {
-    private val _alreadyTeleportedPlayers = HashMap(alreadyTeleportedPlayers)
+interface Cache {
 
-    val alreadyTeleportedPlayers: Map<String, Vec3i>
-        get() = _alreadyTeleportedPlayers
+    fun readPlayers(): Map<String, Vec3i>
 
-    operator fun set(player: EntityPlayer, position: Vec3i) {
-        _alreadyTeleportedPlayers[player.asKey] = position
-    }
+    fun recordPlayer(name: String, spawn: Vec3i)
 
-    operator fun get(player: EntityPlayer) = _alreadyTeleportedPlayers[player.asKey]
+    fun contains(name: String): Boolean
 
-    operator fun contains(player: EntityPlayer) = _alreadyTeleportedPlayers.containsKey(player.asKey)
-
-    private val EntityPlayer.asKey: String
-        get() = this.name
+    fun save()
 }
