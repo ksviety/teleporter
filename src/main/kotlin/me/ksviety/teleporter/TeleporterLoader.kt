@@ -78,8 +78,8 @@ class TeleporterLoader {
                 OneTimePlayerTeleporter(
                     cache = cache,
                     original = StunningPlayerTeleporter(
-                        spawn = config.readSpawnPosition(),
-                        original = PointSavingPlayerTeleporter(
+                        config.readSpawnPosition(),
+                        PointSavingPlayerTeleporter(
                             SafePosition(
                                 config,
                                 world,
