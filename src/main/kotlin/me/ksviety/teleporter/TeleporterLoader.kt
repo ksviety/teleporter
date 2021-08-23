@@ -86,9 +86,7 @@ class TeleporterLoader {
                                 shiftRadius = config.readShiftRadius(),
                                 maxSearchIterations = config.readSearchIterationsLimit(),
                                 position = BoundRandomPosition(
-                                    config.readCenterX(),
-                                    config.readCenterZ(),
-                                    config.readSize(),
+                                    config,
                                     SecureRandom()
                                 )
                             )
