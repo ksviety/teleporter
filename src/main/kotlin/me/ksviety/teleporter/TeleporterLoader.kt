@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.*;
 import me.ksviety.teleporter.position.SafePosition
 import me.ksviety.teleporter.position.BoundRandomPosition
 import me.ksviety.teleporter.exceptions.CannotFindClosestSafePositionException
+import me.ksviety.teleporter.position.BoundPosition
+import me.ksviety.teleporter.position.boundary.ThreeDimensionalBoundary
 import me.ksviety.teleporter.teleporters.EntityTeleporter
 import me.ksviety.teleporter.teleporters.OneTimePlayerTeleporter
 import me.ksviety.teleporter.teleporters.PointSavingPlayerTeleporter
@@ -80,12 +82,24 @@ class TeleporterLoader {
                     StunningPlayerTeleporter(
                         config.readSpawnPosition(),
                         PointSavingPlayerTeleporter(
-                            SafePosition(
-                                config,
-                                world,
-                                BoundRandomPosition(
+                            BoundPosition(
+                                ThreeDimensionalBoundary(
+                                    IntRange(
+                                        config.readCenterX() - (config.readSize() / 2),
+                                        config.readCenterX() + (config.readSize() / 2)
+                                    ),
+                                    IntRange(0, 255),IntRange(
+                                        config.readCenterZ() - (config.readSize() / 2),
+                                        config.readCenterZ() + (config.readSize() / 2)
+                                    )
+                                ),
+                                SafePosition(
                                     config,
-                                    SecureRandom()
+                                    world,
+                                    BoundRandomPosition(
+                                        config,
+                                        SecureRandom()
+                                    )
                                 )
                             )
                         )
